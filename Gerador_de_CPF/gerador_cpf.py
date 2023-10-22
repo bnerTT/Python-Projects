@@ -1,6 +1,5 @@
 import random
 
-
 estado_1 = ["DF", "GO", "MS", "MT", "TO"]
 estado_2 = ["AC", "AM", "AP", "PA", "RO", "RR"]
 estado_3 = ["CE", "MA", "PI"]
@@ -18,9 +17,6 @@ for digitos in estados:
 
 
 print("Bem vindo ao Gerador de CPF.")
-
-
-
 while(True):
     try:    
         controle = int(input("Escolha a opção desejada:\n1)Gerar CPF\n2)Validar CPF\n3)Sair\n"))
@@ -72,12 +68,54 @@ while(True):
                 segundo_digito = 0
             cpf_gerado.append(segundo_digito)
             print(f"O CPF gerado foi: {cpf_gerado}")
+            cpf_gerado.clear()
+
 
         elif controle == 2:
-            cpf_verificado = str("Insira SOMENTE OS NÚMEROS do CPF:\n")
+            cpf_verificado = str(input("Insira SOMENTE OS NÚMEROS do CPF:\n"))
+            cpf_gerado = cpf_verificado[:9]
+
+            #Verificações
+            if len(cpf_verificado) < 11 or len(cpf_verificado) > 11:
+                print("Digite 11 dígitos.\n")
+                continue
             for digitos in cpf_verificado:
                 if digitos.isdigit() == False:
-                    print
+                    print("Digite SOMENTE NÚMEROS.\n")
+                    break
+
+
+            #Começo da Validação
+            primeiro_digito = []
+            multiplica = 10
+            for i in range(9):
+                primeiro_digito.append((int(cpf_verificado[i]))* multiplica)
+                multiplica -= 1
+
+            primeiro_digito = sum(primeiro_digito)
+            primeiro_digito *= 10
+            primeiro_digito %= 11
+            if primeiro_digito == 10:
+                primeiro_digito = 0
+            cpf_gerado += str(primeiro_digito)
+            
+            segundo_digito = []
+            multiplica = 11
+            for i in range(len(cpf_gerado)):
+                segundo_digito.append((int(cpf_gerado[i]))*multiplica)
+                multiplica -= 1
+            
+            segundo_digito = sum(segundo_digito)
+            segundo_digito *= 10
+            segundo_digito %= 11
+            if segundo_digito == 10:
+                segundo_digito = 0
+            cpf_gerado += str(segundo_digito)
+            if cpf_gerado == cpf_verificado:
+                print("CPF Válido.\n")
+            else:
+                print("CPF Inválido.\n")
+
 
         elif controle == 3:
             break
